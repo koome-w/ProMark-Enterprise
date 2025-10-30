@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>User Profile</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+
+  <style>
+    body {
+      font-family: "Poppins", sans-serif;
+      background: #f4f6f9;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .profile-card {
+      background: #fff;
+      padding: 40px 30px;
+      border-radius: 16px;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.1);
+      width: 380px;
+      text-align: center;
+    }
+
+    .avatar {
+      background: linear-gradient(135deg, #007bff, #00c6ff);
+      color: #fff;
+      width: 90px;
+      height: 90px;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 38px;
+      margin: 0 auto 15px;
+    }
+
+    .profile-card h2 {
+      color: #222;
+      margin: 10px 0 6px;
+      font-size: 22px;
+    }
+
+    .profile-card p {
+      color: #555;
+      font-size: 15px;
+      margin: 4px 0;
+    }
+
+    .divider {
+      height: 1px;
+      width: 100%;
+      background: #eee;
+      margin: 15px 0;
+    }
+
+    .logout-btn {
+      margin-top: 20px;
+      padding: 10px 25px;
+      background: #dc3545;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .logout-btn:hover {
+      background: #c82333;
+      transform: translateY(-2px);
+    }
+  </style>
+</head>
+
+<body>
+  <div class="profile-card">
+    <div class="avatar"><i class="fas fa-user"></i></div>
+    <h2 id="full_name">Loading...</h2>
+    <p id="email"></p>
+    <p id="role"></p>
+    <div class="divider"></div>
+    <button class="logout-btn" onclick="logout()">Logout</button>
+  </div>
+
+  <script>
+   async function fetchUser() {
+  const res = await fetch("../php/get_users.php", {
+    credentials: "include" 
+  });
+  const response = await res.json();
+
+  if (response.status === "error") {
+    window.location.href = "../html/index.html";
+    return;
+  }
+
+  const user = response.data;
+  document.getElementById("full_name").textContent = user.full_name;
+  document.getElementById("email").textContent = user.email;
+  document.getElementById("role").textContent = "Role: " + user.role;
+}
+
+function logout() {
+      window.location.href = "../php/logout.php";
+    }
+
+fetchUser();
+
+  </script>
+</body>
+</html>

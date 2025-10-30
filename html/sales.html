@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ProMark - Sales Management</title>
+    <link rel="stylesheet" href="../css/styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <div class="logo-icon">P</div>
+                    <span class="logo-text">ProMark</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+            </div>
+            
+            <nav class="sidebar-nav">
+                <ul>
+                    <li class="nav-item">
+                        <a href="dashboard.html" class="nav-link">
+                            <i class="fas fa-th-large"></i>
+                            <span>Dashboard</span>
+                        </a>
+                    </li>                    
+                    <li class="nav-item">
+                        <a href="inventory.html" class="nav-link">
+                            <i class="fas fa-boxes"></i>
+                            <span>Inventory</span>
+                        </a>
+                    </li>
+                    <li class="nav-item active">
+                        <a href="sales.html" class="nav-link">
+                            <i class="fas fa-dolly"></i>
+                            <span>Sales</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="stockalert.html" class="nav-link">
+                            <i class="fas fa-exclamation-circle"></i>
+                            <span>Stock Alert</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="users.html" class="nav-link">
+                            <i class="fas fa-users"></i>
+                            <span>Users</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="reports.html" class="nav-link">
+                            <i class="fas fa-chart-bar"></i>
+                            <span>Reports</span>
+                        </a>
+                    </li>  
+                </ul>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Header -->
+            <header class="header">
+                <div class="notification-icon" id="notificationIcon">
+                            <i class="fas fa-bell"></i>
+                            <span class="notification-badge" id="notificationBadge" style="display: none;"></span>
+                            <div class="notification-dropdown" id="notificationDropdown">
+                                <p class="no-alerts">No low stock items</p>
+                                <ul id="notificationList"></ul>
+                            </div>
+                </div>
+                <div class="header-right">
+
+                    <div class="notification-icon">
+                        <i class="fas fa-bell"></i>
+                        <span class="notification-badge"></span>
+                    </div>
+                    <!-- USER PROFILE DROPDOWN -->
+                    <div class="user-profile" id="userProfile">
+                    <div class="user-avatar">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <i class="fas fa-chevron-down"></i>
+
+                    <!-- DROPDOWN MENU -->
+                    <div class="user-dropdown" id="userDropdown">
+                        <ul>
+                        <li><a href="../html/profile.html"><i class="fas fa-user-circle"></i> Profile</a></li>
+                        <li><a href="../php/logout.php"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+                        </ul>
+                    </div>
+                    </div>
+                </div>
+            </header>
+    <div class="container">
+        <!-- Quick Actions Section -->
+        <div class="quick-actions">
+            <button class="action-btn primary" id="newSaleBtn">
+                <i class="fas fa-plus"></i> New Sale
+            </button>
+        </div>
+
+        <!-- Filters Section -->
+        <div class="filters-section">
+            <div class="filter-group">
+                <label for="dateFromFilter">From Date</label>
+                <input type="date" id="dateFromFilter" class="filter-input">
+            </div>
+            <div class="filter-group">
+                <label for="dateToFilter">To Date</label>
+                <input type="date" id="dateToFilter" class="filter-input">
+            </div>
+            <div class="filter-group">
+                <label for="productFilter">Product</label>
+                <select id="productFilter" class="filter-input">
+                    <option value="">All Products</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Sales Summary Section -->
+        <div class="table-card">
+            <div class="table-header">
+                <h3>Sales Records</h3>                
+                <div class="table-controls">              
+                </div>
+            </div>
+            <table class="data-table" id="salesTable">
+                <thead>
+                    <tr>
+                        <!--<th>Sale ID</th>-->                        
+                        <th>Product</th>
+                        <th>Quantity</th>
+                        <th>Unit Price</th>
+                        <th>Total</th>
+                        <th>Recorded By</th>
+                        <th>Date</th>
+                        <!--<th>Status</th>-->
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="salesTableBody">                
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- New Sale Modal -->
+    <div class="modal" id="saleModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modalTitle">Record New Sale</h3>
+                <button class="modal-close" id="closeSaleModal" onclick="closeModal('saleModal')">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="saleForm">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="productSelect">Product</label>
+                            <select id="productSelect" required>
+                                <option value="">Select Product</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="quantity">Quantity</label>
+                            <input type="number" id="quantity" min="1" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="unitPrice">Unit Price</label>
+                            <input type="number" id="unitPrice" step="0.01" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="totalAmount">Total Amount</label>
+                            <input type="number" id="totalAmount" readonly>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="saleDate">Sale Date</label>
+                            <input type="datetime-local" id="saleDate" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="recordedBy">Recorded By</label>
+                            <input type="text" id="recordedBy" required>
+                        </div>
+                    </div>                                  
+                </form>
+            <div class="modal-footer">
+                <button class="btn-secondary" onclick="closeModal('saleModal')">Cancel</button>
+                <button class="btn-primary" type="button" onClick="saveSale()">Record Sale</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sale Details Modal -->
+    <div class="modal" id="saleDetailsModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Sale Details</h3>
+                <button class="modal-close" id="closeSaleDetailsModal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body" id="saleDetailsContent">
+                <!-- Sale details will be populated here -->
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary print-receipt">
+                    <i class="fas fa-print"></i> Print Receipt
+                </button>
+            </div>
+        </div>
+    </div>
+    <script src="../JavaScript/index.js"></script>
+    <script src="../JavaScript/navigation.js"></script>
+    <script src="../JavaScript/sales.js"></script>
+</body>
+</html>
